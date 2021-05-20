@@ -1,7 +1,8 @@
 import React from "react";
 import TableHeader from "./TableHeader";
 function InfoTable(props) {
-  console.log(props.data[0] && Object.keys(props.data[0])); //
+  //console.log(props.data[0] && Object.keys(props.data[0]));
+  //console.log(props);
   return (
     <div className="infoTable">
       <div className="infoTable__search">
@@ -13,28 +14,33 @@ function InfoTable(props) {
             <tr>
               <TableHeader
                 title="Id"
-                string="id"
+                dataKey="id"
                 sortMethod={props.onSort}
+                currentSort={props.currentSort}
               ></TableHeader>
               <TableHeader
                 title="First Name"
-                string="firstName"
+                dataKey="firstName"
                 sortMethod={props.onSort}
+                currentSort={props.currentSort}
               ></TableHeader>
               <TableHeader
                 title="Last Name"
-                string="lastName"
+                dataKey="lastName"
                 sortMethod={props.onSort}
+                currentSort={props.currentSort}
               ></TableHeader>
               <TableHeader
                 title="E-mail"
-                string="email"
+                dataKey="email"
                 sortMethod={props.onSort}
+                currentSort={props.currentSort}
               ></TableHeader>
               <TableHeader
                 title="Phone"
-                string="phone"
+                dataKey="phone"
                 sortMethod={props.onSort}
+                currentSort={props.currentSort}
               ></TableHeader>
             </tr>
           </thead>
