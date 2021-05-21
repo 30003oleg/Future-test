@@ -35,10 +35,15 @@ main {
 .infoTable__search {
   width: 100%;
 }
-.infoTable__search input {
+.infoTable__search > * {
   float: right;
   margin: 5px 10px;
 }
+.infoTable__search > button {
+  width: 30px;
+  height: 10px;
+}
+
 .infoTable__table {
   margin: 10px auto;
   width: 80%;
@@ -87,4 +92,3 @@ main {
   float: right;
   resize: none;
 }
-

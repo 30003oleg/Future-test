@@ -4,7 +4,7 @@ function TableHeader({ title, dataKey, sortMethod, currentSort }) {
   
   return (
     <th onClick={sortMethod.bind(null, dataKey)}>
-      {title} {dataKey == currentSort[1] ? (currentSort[0] ? "▲" : "▼") : ""}
+      {title} {dataKey == currentSort[1] ? (currentSort[0] ? "▼" : "▲") : ""}
     </th>
   );
 }

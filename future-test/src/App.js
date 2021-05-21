@@ -6,24 +6,30 @@ function App() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentSort, setCurrentSort] = useState([]); // [true, 'phone']
+  const [filteredData, setFilteredData] = useState([]);
+  const [fetchURL, setFetchURL] = useState(`http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D`);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pagedData, setPagedData] = useState([]);
 
 
 
+  const onFetch = (fetchURL) => {
+    setFetchURL(fetchURL);
+  }
 
   const onSort = (dataKey) => {
     if (currentSort[0]) {
       switch (dataKey) {
         case 'id':
-          currentData.sort(
+          filteredData.sort(
             (a, b) => parseInt(a[dataKey]) - parseInt(b[dataKey])
           );
           break;
-
         case 'firstName':
         case 'lastName':
         case 'email':
         case 'phone':
-          currentData.sort(
+          filteredData.sort(
             (a, b) => {
               let valueA = a[dataKey].toLowerCase();
               let valueB = b[dataKey].toLowerCase();
@@ -35,24 +41,24 @@ function App() {
               }
               return 0;
             }
-
           );
           break;
       }
+      let sortedData = [...filteredData];
+      setFilteredData(sortedData);
       setCurrentSort([false, dataKey]);
     } else {
       switch (dataKey) {
         case 'id':
-          currentData.sort(
+          filteredData.sort(
             (a, b) => parseInt(b[dataKey]) - parseInt(a[dataKey])
           );
           break;
-
         case 'firstName':
         case 'lastName':
         case 'email':
         case 'phone':
-          currentData.sort(
+          filteredData.sort(
             (a, b) => {
               let valueA = a[dataKey].toLowerCase();
               let valueB = b[dataKey].toLowerCase();
@@ -64,30 +70,73 @@ function App() {
               }
               return 0;
             }
-
           );
           break;
       }
+      let sortedData = [...filteredData];
+      setFilteredData(sortedData);
       setCurrentSort([true, dataKey]);
     }
-    //console.log(dataKey);
+  }
+
+
+
+
+  const onSearch = (subString) => {
+    if (subString) {
+      let filteredData = currentData.filter(
+        (elem, index, array) => {
+          for (let key in elem) {
+            if (key != 'address' && key != 'description') {
+              if (elem[key].toString().includes(subString)) return true;
+            }
+          }
+        }
+      );
+      setFilteredData(filteredData);
+    } else setFilteredData(currentData);
+  }
+
+  const onChangePage = (pageChange) => {
+    let maxPage = Math.ceil(filteredData.length / 50) - 1;
+    if (pageChange) {
+      if (currentPage < maxPage) setCurrentPage(currentPage + 1);
+    }
+
+    if (!pageChange) {
+      if (currentPage > 0) setCurrentPage(currentPage - 1);
+    }
 
   }
 
-  useEffect(() => {
-    fetch(`http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D`)
+
+  useEffect(async () => {
+    setIsLoaded(false);
+    await fetch(fetchURL)
       .then(resp => resp.json())
       .then(
         (result) => {
           setIsLoaded(true);
           setCurrentData(result);
+          setFilteredData(result);
         },
         (error) => {
           setIsLoaded(true);
           setError(error);
         }
       )
-  }, []);
+  }, [fetchURL]);
+
+  useEffect(() => {
+    let maxStringsCount = 50;
+    let pagedData = filteredData.slice(
+      maxStringsCount * currentPage, (maxStringsCount * (currentPage + 1))
+    );
+    setPagedData(pagedData);
+  }, [filteredData, currentPage]);
+
+
+
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
@@ -97,7 +146,16 @@ function App() {
     return (
       <div>
         <main>
-          {currentData && <InfoTable data={currentData} onSort={onSort} currentSort={currentSort} ></InfoTable>}
+          <DataChoose onFetch={onFetch}></DataChoose>
+          {currentData &&
+            <InfoTable
+              data={pagedData}
+              onSort={onSort}
+              currentSort={currentSort}
+              onSearch={onSearch}
+              currentPage={currentPage}
+              onChangePage={onChangePage}
+            ></InfoTable>}
         </main>
         <Loader></Loader>
       </div>
