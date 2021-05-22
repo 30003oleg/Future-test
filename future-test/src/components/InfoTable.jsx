@@ -1,5 +1,5 @@
 import React from "react";
-import { TableHeader, TableSearch, TablePagination } from "./";
+import { TableHeader, TableSearch, TablePagination, TableAddRow } from "./";
 function InfoTable({
   onSearch,
   onSort,
@@ -7,9 +7,11 @@ function InfoTable({
   data,
   currentPage,
   onChangePage,
+  onAddNewRow,
 }) {
   return (
     <div className="infoTable">
+      <TableAddRow onAddNewRow={onAddNewRow}></TableAddRow>
       <TableSearch onSearch={onSearch}></TableSearch>
       <div className="infoTable__table">
         <table>
@@ -48,9 +50,9 @@ function InfoTable({
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              //исправить key
-              <tr key={item.id + item.phone}>
+            {data.map((item, index) => (
+              //исправить key item.id + item.phone + 
+              <tr key={index}>
                 <td>{item.id}</td>
                 <td>{item.firstName}</td>
                 <td>{item.lastName}</td>

@@ -95,6 +95,7 @@ function App() {
       );
       setFilteredData(filteredData);
     } else setFilteredData(currentData);
+    setCurrentPage(0);
   }
 
   const onChangePage = (pageChange) => {
@@ -102,11 +103,17 @@ function App() {
     if (pageChange) {
       if (currentPage < maxPage) setCurrentPage(currentPage + 1);
     }
-
     if (!pageChange) {
       if (currentPage > 0) setCurrentPage(currentPage - 1);
     }
+  }
 
+  const onAddNewRow = (newRow) => {
+    let newDataObj = { ...newRow }
+    let arr = [...filteredData];
+    arr.unshift(newDataObj);
+    setFilteredData(arr);
+    console.log(newDataObj);
   }
 
 
@@ -155,6 +162,7 @@ function App() {
               onSearch={onSearch}
               currentPage={currentPage}
               onChangePage={onChangePage}
+              onAddNewRow={onAddNewRow}
             ></InfoTable>}
         </main>
         <Loader></Loader>
