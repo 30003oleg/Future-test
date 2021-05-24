@@ -2,17 +2,27 @@ import React from "react";
 
 function AdditionalData({ data }) {
   return (
-    <div>
-      Выбран пользователь{" "}
-      <b>
-        {data.firstName} {data.lastName}
-      </b>
-      Описание:
+    <div className="moreData">
+      <p>
+        Выбран пользователь:{" "}
+        <b>
+          {data.firstName} {data.lastName}
+        </b>
+      </p>
+      <p>Описание:</p>
       <textarea value={data.description} readOnly></textarea>
-      Адрес проживания: <b>{data.address.streetAddress}</b>
-      Город: <b>{data.address.city}</b>
-      Провинция/штат: <b>{data.address.state}</b>
-      Индекс: <b>{data.address.zip}</b>
+      <p>
+        Адрес проживания: <b>{data.address.streetAddress}</b>
+      </p>
+      <p>
+        Город: <b>{data.address.city}</b>
+      </p>
+      <p>
+        Провинция/штат: <b>{data.address.state}</b>
+      </p>
+      <p>
+        Индекс: <b>{data.address.zip}</b>
+      </p>
     </div>
   );
 }
