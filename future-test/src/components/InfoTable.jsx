@@ -1,5 +1,13 @@
 import React from "react";
-import { TableHeader, TableSearch, TablePagination, TableAddRow } from "./";
+import {
+  TableHeader,
+  TableSearch,
+  TablePagination,
+  TableAddRow,
+  TableRow,
+  AdditionalData,
+} from "./";
+
 function InfoTable({
   onSearch,
   onSort,
@@ -9,10 +17,18 @@ function InfoTable({
   onChangePage,
   onAddNewRow,
 }) {
+  const [moreInfo, setMoreInfo] = React.useState(null);
+
+  const showAdditionalData = (item) => {
+    setMoreInfo(item);
+  };
+
   return (
     <div className="infoTable">
-      <TableAddRow onAddNewRow={onAddNewRow}></TableAddRow>
-      <TableSearch onSearch={onSearch}></TableSearch>
+      <div className="infoTable__top">
+        <TableAddRow onAddNewRow={onAddNewRow}></TableAddRow>
+        <TableSearch onSearch={onSearch}></TableSearch>
+      </div>
       <div className="infoTable__table">
         <table>
           <thead>
@@ -51,14 +67,11 @@ function InfoTable({
           </thead>
           <tbody>
             {data.map((item, index) => (
-              //исправить key item.id + item.phone + 
-              <tr key={index}>
-                <td>{item.id}</td>
-                <td>{item.firstName}</td>
-                <td>{item.lastName}</td>
-                <td>{item.email}</td>
-                <td>{item.phone}</td>
-              </tr>
+              <TableRow
+                key={index}
+                item={item}
+                showAdditionalData={showAdditionalData}
+              />
             ))}
           </tbody>
         </table>
@@ -67,6 +80,7 @@ function InfoTable({
         currentPage={currentPage}
         onChangePage={onChangePage}
       ></TablePagination>
+      {moreInfo ? <AdditionalData data={moreInfo}></AdditionalData> : null}
     </div>
   );
 }

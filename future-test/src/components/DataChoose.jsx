@@ -11,7 +11,7 @@ function DataChoose({ onFetch }) {
         }}
         className="dataChoose__button"
       >
-        Малый
+        32 Строки
       </button>
       <button
         onClick={() => {
@@ -19,7 +19,7 @@ function DataChoose({ onFetch }) {
         }}
         className="dataChoose__button"
       >
-        Большой
+        1000 Строк
       </button>
     </div>
   );

@@ -2,7 +2,14 @@ import React from "react";
 import "../css/modalForm.css";
 
 function TableAddRow({ onAddNewRow }) {
-  const [newRowData, setNewRowData] = React.useState({});
+  const [newRowData, setNewRowData] = React.useState({
+    address: {
+      streetAddress: " ",
+      city: " ",
+      state: " ",
+      zip: " ",
+    },
+  });
   const [isShown, setIsSwown] = React.useState(false);
   const [valid, setValid] = React.useState(false);
 
@@ -13,10 +20,18 @@ function TableAddRow({ onAddNewRow }) {
   };
 
   React.useEffect(() => {
-    console.log(new RegExp("[a-zA-Z]"));
-    /*setValid(
-        (newRowData['id'] ==  && b
-    ); */
+    let regExpName = new RegExp(/^[a-zа-яё]+$/gi);
+    let regExpId = new RegExp(/^\d+$/);
+    let regExpEmail = new RegExp(/^[\w\d@.]+$/);
+    let regPhone = new RegExp(/^[\d()+-]+$/);
+    let a = regExpId.test(newRowData["id"]);
+    let b = regExpName.test(newRowData["firstName"]);
+    regExpName.lastIndex = 0;
+    let c = regExpName.test(newRowData["lastName"]);
+    let d = regExpEmail.test(newRowData["email"]);
+    let e = regPhone.test(newRowData["phone"]);
+
+    setValid(a && b && c && d && e);
   }, [newRowData]);
 
   return (
@@ -31,38 +46,57 @@ function TableAddRow({ onAddNewRow }) {
               className="close"
               onClick={() => {
                 setIsSwown(false);
-                setNewRowData({});
+                setNewRowData({
+                  address: {
+                    streetAddress: " ",
+                    city: " ",
+                    state: " ",
+                    zip: " ",
+                  },
+                });
               }}
             >
               &times;
             </span>
-            <input
-              type="number"
-              name="id"
-              onChange={(e) => onChangeSave(e.target.name, e.target.value)}
-            />
-            <input
-              type="text"
-              name="firstName"
-              onChange={(e) => onChangeSave(e.target.name, e.target.value)}
-            />
-            <input
-              type="text"
-              name="lastName"
-              onChange={(e) => onChangeSave(e.target.name, e.target.value)}
-            />
-            <input
-              type="email"
-              name="email"
-              onChange={(e) => onChangeSave(e.target.name, e.target.value)}
-            />
-            <input
-              type="tel"
-              name="phone"
-              onChange={(e) => onChangeSave(e.target.name, e.target.value)}
-            />
-            <p>Some text in the Modal..</p>
-            <button onClick={() => onAddNewRow(newRowData)}>
+            <label>{valid ? "" : "Проверьте правильность ввода!"}</label>
+            <div className="modal__inputs">
+              <input
+                type="number"
+                name="id"
+                placeholder="Id"
+                onChange={(e) => onChangeSave(e.target.name, e.target.value)}
+              />
+
+              <input
+                type="text"
+                name="firstName"
+                placeholder="firstName"
+                onChange={(e) => onChangeSave(e.target.name, e.target.value)}
+              />
+
+              <input
+                type="text"
+                name="lastName"
+                placeholder="lastName"
+                onChange={(e) => onChangeSave(e.target.name, e.target.value)}
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="email"
+                onChange={(e) => onChangeSave(e.target.name, e.target.value)}
+              />
+
+              <input
+                type="tel"
+                name="phone"
+                placeholder="phone"
+                onChange={(e) => onChangeSave(e.target.name, e.target.value)}
+              />
+            </div>
+
+            <button onClick={() => onAddNewRow(newRowData)} disabled={!valid}>
               Добавить в таблицу
             </button>
           </div>

@@ -113,7 +113,9 @@ function App() {
     let arr = [...filteredData];
     arr.unshift(newDataObj);
     setFilteredData(arr);
-    console.log(newDataObj);
+    arr = [...currentData];
+    arr.unshift(newDataObj);
+    setCurrentData(arr);
   }
 
 
@@ -165,7 +167,6 @@ function App() {
               onAddNewRow={onAddNewRow}
             ></InfoTable>}
         </main>
-        <Loader></Loader>
       </div>
     );
   }
